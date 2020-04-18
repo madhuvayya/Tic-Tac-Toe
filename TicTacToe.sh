@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 NUM_OF_POS=9
 HEAD=1
@@ -10,9 +10,9 @@ player2=""
 declare -A board
 
 resetBoard(){
-	for((i=0;i<$NUM_OF_POS;i++))
+	for((i=1;i<=$NUM_OF_POS;i++))
 	do
-		board[$i]="-"
+		board[$i]=-
 	done
 }
 
@@ -42,8 +42,20 @@ whoPlaysFirst(){
 	fi
 }
 
+printBoard(){
+
+	echo -e  "\n  BOARD"
+	echo  ${board[1]} \| ${board[2]} \| ${board[3]}
+	echo  ---------
+	echo  ${board[4]} \| ${board[5]} \| ${board[6]}
+	echo  ---------
+	echo  ${board[7]} \| ${board[8]} \| ${board[9]}
+}
+
 resetBoard
 
 findLetterAssigned
 
 whoPlaysFirst
+
+printBoard
