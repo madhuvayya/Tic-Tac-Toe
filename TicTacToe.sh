@@ -212,7 +212,7 @@ winOrBlockMove(){
 
 }
 
-cornersChoice(){
+cornerChoice(){
 	for((i=0;i<2;i++))
 	do
 		if [ ${board[$(( 1 + 2*$i ))]} = "-" ]
@@ -234,6 +234,18 @@ centreChoice(){
 	fi
 }
 
+sideChoice(){
+	for((i=1;i<4;i++))
+	do
+		t=$((2*$i))
+		if [ ${board[$t]} = "-" ]
+		then
+			position=$t
+			break
+		fi
+	done
+}
+
 computerTurn(){
 	winOrBlockMove $computerLtr
 
@@ -242,10 +254,15 @@ computerTurn(){
 		winOrBlockMove $yourLtr
 		if [ $position -eq 0 ]
 		then
-			cornersChoice
+			cornerChoice
 			if [ $position -eq 0 ]
 			then
 				centreChoice
+			        if [ $position -eq 0 ]
+		   		then
+					sideChoice
+				fi
+
 			fi
 		fi
 	fi
@@ -276,7 +293,6 @@ play(){
 		then
 			echo It is computer turn
 			computerTurn
-			checkValidPosition $position
 			board[$position]=$computerLtr
 			((numOfTurns++))
 			turn="your"
@@ -300,7 +316,6 @@ play(){
 }
 
 start(){
-
 	initilize
 	play
 }
