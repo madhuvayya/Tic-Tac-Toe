@@ -227,15 +227,26 @@ cornersChoice(){
 	done
 }
 
-computerTurn(){
+centreChoice(){
+	if [ ${board[5]} = "-" ]
+	then
+		position=5
+	fi
+}
 
+computerTurn(){
 	winOrBlockMove $computerLtr
+
 	if [ $position -eq 0 ]
 	then
 		winOrBlockMove $yourLtr
 		if [ $position -eq 0 ]
 		then
 			cornersChoice
+			if [ $position -eq 0 ]
+			then
+				centreChoice
+			fi
 		fi
 	fi
 }
