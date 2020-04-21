@@ -136,7 +136,7 @@ checkWinnerTie(){
 	checkTie
 }
 
-rowWinningMove(){
+rowWinningPos(){
 	for((i=0;i<$NUM_OF_ROWS;i++))
 	do
 		t=$((3*$i))
@@ -164,7 +164,7 @@ rowWinningMove(){
 	done
 }
 
-colmWinningMove(){
+colmWinningPos(){
 	for((i=0;i<$NUM_OF_COLMS;i++))
 	do
 		a=${board[$((1+$i))]}
@@ -190,7 +190,7 @@ colmWinningMove(){
 	done
 }
 
-diagWinningMove(){
+diagWinningPos(){
 	for((i=0;i<2;i++))
 	do
 		t=$((2*$i))
@@ -218,13 +218,13 @@ diagWinningMove(){
 }
 
 WinningMove(){
-	rowWinningMove $1
+	rowWinningPos $1
 	if [ $position -eq 0 ]
 	then
-		colmWinningMove $1
+		colmWinningPos $1
 		if [ $position -eq 0 ]
 		then
-			diagWinningMove $1
+			diagWinningPos $1
 		fi
 	fi
 }
@@ -254,7 +254,7 @@ play(){
 	do
 		if [ $turn = computer ]
 		then
-			echo computer turn
+			echo It is computer turn
 			computerTurn
 			board[$position]=$computerLtr
 			checkValidPosition $position
