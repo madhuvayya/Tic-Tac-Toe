@@ -41,10 +41,10 @@ whoPlaysFirst(){
 	rand=$((RANDOM%2))
 	if [ $rand -eq $HEAD ]
 	then
-		echo computer won toss
+		echo computer won the toss
 		turn="computer"
 	else
-		echo you won toss
+		echo you won the toss
 		turn="your"
 	fi
 }
@@ -103,7 +103,8 @@ winner(){
 	fi
 
 	printBoard
-	echo Winner is $player
+	echo Game Over
+	echo $player won the Game
 	exit
 }
 
@@ -111,7 +112,7 @@ checkTie(){
 
 	if [ $numOfTurns -eq $NUM_OF_POS ]
 	then
-		echo game is tie
+		echo Game is tie...
 		exit
 	fi
 }
@@ -272,6 +273,7 @@ checkValidPosition(){
 	if [  ${board[$1]} != "-" ]
 	then
 		echo "entered position is already occupied"
+		echo "enter your choice"
 		valid="false"
 	else
 		valid="true"
@@ -289,6 +291,7 @@ initilize(){
 play(){
 	while [ $numOfTurns -le $NUM_OF_POS  ]
 	do
+		printf "\n"
 		if [ $turn = computer ]
 		then
 			echo It is computer turn
