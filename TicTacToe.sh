@@ -113,15 +113,6 @@ checkTie(){
 	then
 		echo game is tie
 		exit
-	else
-		if [ $turn = computer ]
-		then
-			turn="your"
-		else
-			turn="computer"
-		fi
-
-		play
 	fi
 }
 
@@ -148,17 +139,14 @@ rowPos(){
 		if [[ $a = $1 && $b = $1 && $c = "-" ]]
 		then
 			position=$((3+$t))
-			echo $position
 			break
 		elif [[ $b = $1 && $c = $1 && $a = "-" ]]
 		then
 			position=$((1+$t))
-			echo $position
 			break
 		elif [[ $a = $1 && $c = $1 && $b = "-" ]]
 		then
 			position=$((2+$t))
-			echo $position
 			break
 		fi
 	done
@@ -174,17 +162,14 @@ colmPos(){
 		if [[ $a = $1 && $b = $1 && $c = "-" ]]
 		then
 			position=$((7+$i))
-			echo $position
 			break
 		elif [[ $b = $1 && $c = $1 && $a = "-" ]]
 		then
 			position=$((1+$i))
-			echo $position
 			break
 		elif [[ $a = $1 && $c = $1 && $b = "-" ]]
 		then
 			position=$((4+$i))
-			echo $position
 			break
 		fi
 	done
@@ -201,17 +186,14 @@ diagPos(){
 		if [[ $a = $1 && $b = $1 && $c = "-" ]]
 		then
 			position=$((9-$t))
-			echo $position
 			break
 		elif [[ $b = $1 && $c = $1 && $a = "-" ]]
 		then
 			position=$((1+$t))
-			echo $position
 			break
 		elif [[ $a = $1 && $c = $1 && $b = "-" ]]
 		then
 			position=5
-			echo $position
 			break
 		fi
 	done
@@ -224,23 +206,47 @@ winOrBlockMove(){
 		colmPos $1
 		if [ $position -eq 0 ]
 		then
-			diagPos $1
+	        	diagPos $1
 		fi
 	fi
+
+}
+
+cornersChoice(){
+	for((i=0;i<2;i++))
+	do
+		if [ ${board[$(( 1 + 2*$i ))]} = "-" ]
+		then
+			position=$(( 1 + 2*$i ))
+			break
+		elif [ ${board[$(( 7 + 2*$i ))]} = "-" ]
+		then
+			position=$(( 7 + 2*$i ))
+			break
+		fi
+	done
 }
 
 computerTurn(){
 
 	winOrBlockMove $computerLtr
-
-	winOrBlockMove $playerLtr
+	if [ $position -eq 0 ]
+	then
+		winOrBlockMove $yourLtr
+		if [ $position -eq 0 ]
+		then
+			cornersChoice
+		fi
+	fi
 }
 
 checkValidPosition(){
 	if [  ${board[$1]} != "-" ]
 	then
 		echo "entered position is already occupied"
-		play
+		valid="false"
+	else
+		valid="true"
 	fi
 }
 
@@ -259,24 +265,26 @@ play(){
 		then
 			echo It is computer turn
 			computerTurn
+			checkValidPosition $position
 			board[$position]=$computerLtr
 			((numOfTurns++))
-			checkValidPosition $position
-			printBoard
-			position=0
 			turn="your"
 		else
 			echo It is you turn
 			echo "enter your position(1-9)"
 			read position
 			checkValidPosition $position
-			board[$position]=$yourLtr
-			((numOfTurns++))
-			printBoard
-			checkWinnerTie
-			position=0
+			if [ $valid = true ]
+			then
+				board[$position]=$yourLtr
+				((numOfTurns++))
+				turn="computer"
+			fi
 		fi
 
+		printBoard
+		checkWinnerTie
+		position=0
 	done
 }
 
